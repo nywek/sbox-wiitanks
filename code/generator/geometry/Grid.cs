@@ -1,4 +1,4 @@
-namespace WiiTanks;
+namespace WiiTanks.Geometry;
 
 public class Grid
 {
@@ -15,9 +15,9 @@ public class Grid
 
 	public void Reset()
 	{
-		for (int x = 0; x < Data.GetLength(0); x++)
+		for (int x = 0; x < Width(); x++)
 		{
-			for (int y = 0; y < Data.GetLength(1); y++)
+			for (int y = 0; y < Height(); y++)
 			{
 				if (IsOnEdge(x, y))
 				{
@@ -31,6 +31,16 @@ public class Grid
 		}
 	}
 
+	public int Width()
+	{
+		return Data.GetLength(0);
+	}
+
+	public int Height()
+	{
+		return Data.GetLength(1);
+	}
+
 	public int Area()
 	{
 		return Data.Length;
@@ -38,12 +48,12 @@ public class Grid
 
 	public bool IsInGrid(int x, int y)
 	{
-		return x >= 0 && y >= 0 && x < Data.GetLength(0) && y < Data.GetLength(1);
+		return x >= 0 && y >= 0 && x < Width() && y < Height();
 	}
 
 	public bool IsOnEdge(int x, int y)
 	{
-		return x == 0 || y == 0 || x == Data.GetLength(0) - 1 || y == Data.GetLength(1) - 1;
+		return x == 0 || y == 0 || x == Width() - 1 || y == Height() - 1;
 	}
 
 	public int GetTile(int x, int y)
@@ -76,15 +86,15 @@ public class Grid
 	{
 		for (int iteration = 0; iteration < iterations; iteration++)
 		{
-			for (int x = 0; x < Data.GetLength(0); x++)
+			for (int x = 0; x < Width(); x++)
 			{
-				for (int y = 0; y < Data.GetLength(1); y++)
+				for (int y = 0; y < Height(); y++)
 				{
 					if (IsOnEdge(x, y))
 					{
 						continue;
 					}
-					
+
 					// Threshold
 					// 1: 3x3 => 4 of 8 neighbours
 					// 2: 5x5 => 12 of 24 neighbours
