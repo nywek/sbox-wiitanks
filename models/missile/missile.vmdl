@@ -1,0 +1,132 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "03_mat_addelements.vmat"
+								to = "materials/elements/elements_gray.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Blue"
+						remaps = 
+						[
+							{
+								from = "materials/elements/elements_gray.vmat"
+								to = "materials/elements/elements_blue.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Red"
+						remaps = 
+						[
+							{
+								from = "materials/elements/elements_gray.vmat"
+								to = "materials/elements/elements_red.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Green"
+						remaps = 
+						[
+							{
+								from = "materials/elements/elements_gray.vmat"
+								to = "materials/elements/elements_green.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Yellow"
+						remaps = 
+						[
+							{
+								from = "materials/elements/elements_gray.vmat"
+								to = "materials/elements/elements_yellow.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Gray"
+						remaps = [  ]
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "models/tank/tank2018fbx.FBX"
+						import_translation = [ 8.695, 4.97, -5.857 ]
+						import_rotation = [ 0.0, -90.0, 0.0 ]
+						import_scale = 10.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = 
+							[
+								"__TF_Platform",
+								"__TF_Box",
+								"__TF_Box_Cap",
+								"__TF_Anti_tank_barrier",
+								"__TF_Mine",
+								"TankFree_Body",
+								"TankFree_Canon",
+								"TankFree_Wheel_f_right",
+								"TankFree_Tower",
+								"TankFree_Wheel_b_right",
+								"TankFree_Wheel_b_left",
+								"TankFree_Wheel_f_left",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "end"
+						parent_bone = ""
+						relative_origin = [ -11.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

@@ -1,0 +1,8 @@
+.vs
+code/obj
+code/Properties
+*.csproj
+*.vtex_c
+*.vmat_c
+*.vmdl_c
+*.vpcf_c
