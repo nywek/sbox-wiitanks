@@ -11,12 +11,12 @@
   "CodePath": "/code/",
   "RootNamespace": "WiiTanks",
   "Metadata": {
-    "MaxPlayers": 10,
+    "MaxPlayers": 32,
     "MinPlayers": 0,
     "GameNetworkType": 0,
     "MapSelect": 0,
     "MapList": [
-      "facepunch.construct"
+      "kvn.wiitanks_map"
     ],
     "RankType": 0,
     "PerMapRanking": false,
