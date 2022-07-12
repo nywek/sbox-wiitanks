@@ -4,8 +4,7 @@ root = true
 # C# files
 [*.cs]
 indent_style = tab
-indent_size = tab
-tab_size = 4
+indent_size = 4
 
 # New line preferences
 end_of_line = crlf
