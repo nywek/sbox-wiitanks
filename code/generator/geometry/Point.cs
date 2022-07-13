@@ -43,7 +43,7 @@ public struct Point
 
 	public Point GetNearest(params Point[] points)
 	{
-		if(points.Length == 0)
+		if (points.Length == 0)
 		{
 			return new Point(double.NaN, double.NaN);
 		}
@@ -59,5 +59,15 @@ public struct Point
 		}
 
 		return nearest;
+	}
+
+	public bool IsValidOnGrid(Grid grid)
+	{
+		int x = (int)Math.Round(X, MidpointRounding.AwayFromZero);
+		int y = (int)Math.Round(Y, MidpointRounding.AwayFromZero);
+
+		return grid.IsInGrid(x, y)
+			|| grid.IsOnEdge(x, y)
+			|| !TileResolver.IsEmpty(grid.GetTile(x, y));
 	}
 }
