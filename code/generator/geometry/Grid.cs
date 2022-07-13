@@ -62,7 +62,7 @@ public class Grid
 		{
 			return Data[x, y];
 		}
-		return TileResolver.OUTER_SPACE;
+		return TileResolver.INVALID;
 	}
 
 	public int GetSurroundingBlockingTiles(int x, int y, int deltaSize = 1)
