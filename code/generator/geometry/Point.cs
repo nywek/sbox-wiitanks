@@ -70,10 +70,6 @@ public struct Point
 
 	public void StoreToGrid(Grid grid, int tile = TileResolver.EMPTY)
 	{
-		GridCoordinate pos = new(grid, this);
-		if (pos.IsValid())
-		{
-			pos.ApplyTile(tile);
-		}
+		new GridCoordinate(grid, this).ApplyTile(tile);
 	}
 }

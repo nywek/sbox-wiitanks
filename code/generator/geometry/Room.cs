@@ -109,6 +109,14 @@ public class Room
 		return point.X >= MinX && point.X <= MaxX && point.Y >= MinY && point.Y <= MaxY;
 	}
 
+	public bool IsOverlapping(GridCoordinate coordinate)
+	{
+		return coordinate.X >= MinX
+			&& coordinate.X <= MaxX
+			&& coordinate.Y >= MinY
+			&& coordinate.Y <= MaxY;
+	}
+
 	public bool IsValidOnGrid(Grid grid)
 	{
 		for (int x = MinX; x <= MaxX; x++)
@@ -130,14 +138,16 @@ public class Room
 
 	public void StoreToGrid(Grid grid)
 	{
+		if (!IsValidOnGrid(grid))
+		{
+			return;
+		}
+		
 		for (int x = MinX; x <= MaxX; x++)
 		{
 			for (int y = MinY; y <= MaxY; y++)
 			{
-				if (grid.IsInGrid(x, y) && !grid.IsOnEdge(x, y))
-				{
-					grid.Data[x, y] = TileResolver.ROOM;
-				}
+				new GridCoordinate(grid, x, y).ApplyTile(TileResolver.ROOM);
 			}
 		}
 	}
