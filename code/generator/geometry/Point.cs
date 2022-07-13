@@ -13,9 +13,11 @@ public struct Point
 		Y = y;
 	}
 
+	public Point(GridCoordinate coordinate) : this(coordinate.X, coordinate.Y) { }
+
 	public double DistanceTo(Point other)
 	{
-		return Math.Sqrt((other.X - X) * (other.X - X) + (other.Y - Y) * (other.Y - Y));
+		return Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2));
 	}
 
 	public Point GetCenterPointTo(Point other)
@@ -63,7 +65,15 @@ public struct Point
 
 	public bool IsValidOnGrid(Grid grid)
 	{
-		GridCoordinate pos = new(this);
-		return grid.IsInGrid(pos.X, pos.Y) && !grid.IsOnEdge(pos.X, pos.Y);
+		return new GridCoordinate(grid, this).IsValid();
+	}
+
+	public void StoreToGrid(Grid grid, int tile = TileResolver.EMPTY)
+	{
+		GridCoordinate pos = new(grid, this);
+		if (pos.IsValid())
+		{
+			pos.ApplyTile(tile);
+		}
 	}
 }
