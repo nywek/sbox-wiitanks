@@ -9,8 +9,8 @@ public class TileResolver
 	public const int ROOM = 4;
 	public const int PATHWAY = 8;
 
-	public const int OPEN = EMPTY | ROOM | PATHWAY;
-	public const int BLOCKING = STATIC_WALL | DYNAMIC_WALL;
+	private const int OPEN = EMPTY | ROOM | PATHWAY;
+	private const int BLOCKING = STATIC_WALL | DYNAMIC_WALL;
 
 	public static bool IsValid(int tile)
 	{
