@@ -63,11 +63,7 @@ public struct Point
 
 	public bool IsValidOnGrid(Grid grid)
 	{
-		int x = (int)Math.Round(X, MidpointRounding.AwayFromZero);
-		int y = (int)Math.Round(Y, MidpointRounding.AwayFromZero);
-
-		return grid.IsInGrid(x, y)
-			|| grid.IsOnEdge(x, y)
-			|| !TileResolver.IsEmpty(grid.GetTile(x, y));
+		GridCoordinate pos = new(this);
+		return grid.IsInGrid(pos.X, pos.Y) && !grid.IsOnEdge(pos.X, pos.Y);
 	}
 }
