@@ -12,6 +12,11 @@ public partial class Tank
 			return;
 		}
 
+		if ( LifeState != LifeState.Alive )
+		{
+			return;
+		}
+
 		var camRot = Components.Get<ArenaCameraMode>().TargetRot;
 		var movement = (Input.Forward * Vector3.Up * camRot) + (Input.Left * Vector3.Left * camRot);
 
@@ -28,8 +33,9 @@ public partial class Tank
 		DebugOverlay.Sphere( Input.Cursor.Origin, 5f, Color.Red, 0f, false );
 
 		var moveHelper = new MoveHelper( Position, Velocity );
-		moveHelper.Trace = moveHelper.Trace.Ignore( Body );
-		moveHelper.Trace = moveHelper.Trace.Size( Body.CollisionBounds );
+		moveHelper.Trace = moveHelper.Trace.Ignore( this )
+			.WithoutTags( "dead" )
+			.Size( MoveBounds );
 
 		if ( moveHelper.TryMove( Time.Delta ) > 0 )
 		{
