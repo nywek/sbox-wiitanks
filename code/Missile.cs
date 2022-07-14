@@ -28,6 +28,8 @@ public partial class Missile : ModelEntity
 		Direction = Vector3.Forward * Rotation;
 
 		PlaySpawnSound();
+		
+		Tags.Add( "ArenaEntity" );
 	}
 
 	public override void ClientSpawn()

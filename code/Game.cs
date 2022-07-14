@@ -17,7 +17,7 @@ public partial class TankGame : Sandbox.Game
 		base.PostLevelLoaded();
 
 		Host.AssertServer();
-		
+
 		Lobby = new Lobby();
 	}
 
@@ -27,6 +27,18 @@ public partial class TankGame : Sandbox.Game
 		Round?.Tick();
 	}
 
+	[Event( "round.statechange" )]
+	public void OnRoundEnded( RoundState newState )
+	{
+		if ( newState == RoundState.Ended )
+		{
+			// Begin a new round
+			var newRound = Lobby.CreateRound();
+			Round = newRound;
+			newRound.Begin();
+		}
+	}
+
 	public override void ClientJoined( Client client )
 	{
 		base.ClientJoined( client );
@@ -34,7 +46,7 @@ public partial class TankGame : Sandbox.Game
 		if ( Round is null )
 		{
 			// As long as no round exists, just randomly spawn tanks
-			
+
 			var tank = new Tank( client, Team.BLUE );
 			var randomArena = Entity.All.OfType<Arena>().First();
 			var spawn = randomArena.FindSpawnPoints().First();
@@ -43,17 +55,17 @@ public partial class TankGame : Sandbox.Game
 
 			tank.LifeState = LifeState.Alive;
 		}
-		
+
 		Lobby.Join( client );
 
 		if ( Lobby.IsFull )
 		{
 			// Begin round, kill all existing tanks
-			foreach (var tank in Entity.All.OfType<Tank>().ToList())
+			foreach ( var tank in Entity.All.OfType<Tank>().ToList() )
 			{
 				tank.Delete();
 			}
-			
+
 			Round = Lobby.CreateRound();
 
 			Round.Begin();

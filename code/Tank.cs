@@ -35,15 +35,15 @@ public partial class Tank : ModelEntity
 		Body.SetParent( this );
 		Body.SetModel( "models/tank/tank_body.vmdl" );
 		Body.Owner = this;
-		Body.Tags.Add( "TankBody" );
-
+		
 		SetupPhysicsFromOBB( PhysicsMotionType.Static, HitboxBounds.Mins, HitboxBounds.Maxs );
 
 		Head = new ModelEntity();
 		Head.SetParent( this );
 		Head.SetModel( "models/tank/tank_head.vmdl" );
 		Head.Owner = this;
-		Head.Tags.Add( "TankHead" );
+		
+		Tags.Add( "ArenaEntity" );
 	}
 
 	public void SpawnAtArena( Arena arena, Vector3 pos )

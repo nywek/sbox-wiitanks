@@ -31,6 +31,7 @@ public partial class Round : BaseNetworkable
 		State = newState;
 		TimeSinceStateChanged = 0;
 		Log.Info( $"New round state: {newState}" );
+		Event.Run( "round.statechange", newState );
 	}
 	
 	public void Join( Client client, Team team )
@@ -112,6 +113,12 @@ public partial class Round : BaseNetworkable
 
 		if ( State == RoundState.Ending && TimeSinceStateChanged > ENDING_DURATION )
 		{
+			// Round cleanup
+			foreach (var entity in Entity.All.Where( e => e.Tags.Has( "ArenaEntity" ) ).ToList())
+			{
+				entity.Delete();
+			}
+
 			SwitchState( RoundState.Ended );
 		}
 	}
