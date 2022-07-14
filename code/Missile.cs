@@ -10,7 +10,7 @@ public partial class Missile : ModelEntity
 	[ConVar.ServerAttribute( "missile_max_bounces", Min = 0 )]
 	public static int MaxBounces { get; set; } = 1;
 
-	[Net] public Tank Source { get; set; }
+	[Net] public Tank? Source { get; set; }
 	[Net] public Vector3 Direction { get; set; }
 
 	private int Bounces;
@@ -32,12 +32,7 @@ public partial class Missile : ModelEntity
 
 	public override void ClientSpawn()
 	{
-		base.ClientSpawn();
-		//Particles.Create( "particles/missile_trail.vpcf", this, "end" );
-		Log.Info( "Played sound" );
 		Particles.Create( "particles/missile_flames.vpcf", this, "end" );
-		//Particles.Create( "particles/shoot_particle.vpcf", this, "end" );
-		//Particles.Create( "particles/tank_shoot.vpcf", this, "end" );
 	}
 
 	[Event.Tick.Server]
@@ -45,7 +40,8 @@ public partial class Missile : ModelEntity
 	{
 		var newPos = Position + (Direction * Speed * Time.Delta);
 		var tr = Trace.Ray( Position, newPos )
-			.Ignore( Source.Body )
+			.Ignore( Source?.Body )
+			.WithoutTags( "dead" )
 			.UseHitboxes( true )
 			.Run();
 
@@ -58,7 +54,6 @@ public partial class Missile : ModelEntity
 		// Check what the missile hit
 		if ( tr.Entity is WorldEntity )
 		{
-			// bounce
 			Bounces++;
 
 			if ( Bounces > MaxBounces )
@@ -73,20 +68,10 @@ public partial class Missile : ModelEntity
 				PlayBounceEffect();
 			}
 		}
-		else if ( tr.Entity is ModelEntity )
+		else if ( tr.Entity is Tank t )
 		{
-			if ( tr.Entity.Tags.Has( "TankBody" ) )
-			{
-				Tank tank = tr.Entity.Parent as Tank;
-				Log.Info( $"Found tank: {tank}" );
-				tank.DeleteAsync( 0.1f );
-			}
-
+			t.Kill();
 			DeleteAsync( 0.1f );
-		}
-		else
-		{
-			Log.Info( $"TR: {tr}" );
 		}
 	}
 
