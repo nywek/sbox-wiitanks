@@ -35,14 +35,14 @@ public partial class Tank : ModelEntity
 		Body.SetParent( this );
 		Body.SetModel( "models/tank/tank_body.vmdl" );
 		Body.Owner = this;
-		
-		SetupPhysicsFromOBB( PhysicsMotionType.Static, HitboxBounds.Mins, HitboxBounds.Maxs );
 
 		Head = new ModelEntity();
 		Head.SetParent( this );
 		Head.SetModel( "models/tank/tank_head.vmdl" );
 		Head.Owner = this;
-		
+
+		SetupPhysicsFromOBB( PhysicsMotionType.Static, HitboxBounds.Mins, HitboxBounds.Maxs );
+
 		Tags.Add( "ArenaEntity" );
 	}
 
@@ -55,12 +55,7 @@ public partial class Tank : ModelEntity
 
 	public override void Simulate( Client cl )
 	{
-		//DebugOverlay.Box( this, Color.Red );
-		//DebugOverlay.Box( Position, Rotation, HitboxBounds.Mins, HitboxBounds.Maxs, Color.Yellow );
-		DebugOverlay.Box( Position, Rotation.Identity, MoveBounds.Mins, MoveBounds.Maxs, Color.Blue );
-		//DebugOverlay.Box( Position, Rotation, CollisionBounds.Mins, CollisionBounds.Maxs, Color.Green );
-		
-		if ( Host.IsServer && LifeState == LifeState.Alive &&  Input.Pressed( InputButton.PrimaryAttack ) )
+		if ( Host.IsServer && LifeState == LifeState.Alive && Input.Pressed( InputButton.PrimaryAttack ) )
 		{
 			var missile = new Missile();
 			missile.Spawn( this );
@@ -83,7 +78,7 @@ public partial class Tank : ModelEntity
 			Head.RenderColor = Color.Transparent;
 			Body.RenderColor = Color.Transparent;
 		}
-		
+
 		SimulateMovement( cl );
 	}
 
@@ -106,5 +101,4 @@ public partial class Tank : ModelEntity
 		LifeState = LifeState.Dead;
 		Tags.Add( "dead" );
 	}
-
 }
