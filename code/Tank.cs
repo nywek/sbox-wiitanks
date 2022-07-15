@@ -6,6 +6,13 @@ public partial class Tank : ModelEntity
 {
 	[ConVar.ServerAttribute( "tank_speed", Min = 0f )]
 	public static float DefaultSpeed { get; set; } = 200f;
+
+	[ConVar.ServerAttribute( "tank_ammo", Min = 0 )]
+	public static int MaxAmmo { get; set; } = 5;
+
+	[ConVar.ServerAttribute( "tank_reload_speed", Min = 0 )]
+	public static float ReloadSpeed = 1f;
+
 	private static Color RespawningColor = new Color( 1f, 1f, 1f, 0.25f );
 	private static Color AliveColor = Color.White;
 	private static BBox HitboxBounds = new BBox( new(-27f, -23f, 0.5136f), new(27f, 23f, 75) );
@@ -15,6 +22,8 @@ public partial class Tank : ModelEntity
 	[Net] public ModelEntity Body { get; set; }
 	[Net] public ModelEntity Head { get; set; }
 	[Net, Predicted] public Rotation TargetRotation { get; set; }
+	[Net] public int Ammo { get; set; }
+	private TimeSince TimeSinceLastAmmoReplenish { get; set; }
 
 	public Tank()
 	{
@@ -44,6 +53,8 @@ public partial class Tank : ModelEntity
 		SetupPhysicsFromOBB( PhysicsMotionType.Static, HitboxBounds.Mins, HitboxBounds.Maxs );
 
 		Tags.Add( "ArenaEntity" );
+
+		Ammo = MaxAmmo;
 	}
 
 	public void SpawnAtArena( Arena arena, Vector3 pos )
@@ -55,12 +66,21 @@ public partial class Tank : ModelEntity
 
 	public override void Simulate( Client cl )
 	{
-		if ( Host.IsServer && LifeState == LifeState.Alive && Input.Pressed( InputButton.PrimaryAttack ) )
+		if ( Host.IsServer && LifeState == LifeState.Alive && Input.Pressed( InputButton.PrimaryAttack ) && Ammo > 0 )
 		{
+			Ammo--;
+			TimeSinceLastAmmoReplenish = 0;
+
 			var missile = new Missile();
 			missile.Spawn( this );
 
 			PlayShootEffect();
+		}
+
+		if ( Ammo < MaxAmmo && TimeSinceLastAmmoReplenish > ReloadSpeed )
+		{
+			TimeSinceLastAmmoReplenish = 0;
+			Ammo++;
 		}
 
 		if ( LifeState == LifeState.Respawning )
