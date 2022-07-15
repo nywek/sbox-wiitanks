@@ -13,13 +13,13 @@
   "Metadata": {
     "MaxPlayers": 32,
     "MinPlayers": 0,
-    "GameNetworkType": 0,
-    "MapSelect": 0,
+    "GameNetworkType": "Multiplayer",
+    "MapSelect": "Unrestricted",
     "MapList": [
       "kvn.wiitanks_map"
     ],
-    "RankType": 0,
+    "RankType": "None",
     "PerMapRanking": false,
-    "LeaderboardType": 0
+    "LeaderboardType": "None"
   }
 }
