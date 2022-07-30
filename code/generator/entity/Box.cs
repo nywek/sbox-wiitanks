@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+namespace WiiTanks.Entity;
 
-namespace Sandbox;
+using Sandbox;
+using System.Collections.Generic;
 
 public partial class Box : ModelEntity
 {
@@ -21,7 +22,6 @@ public partial class Box : ModelEntity
 
 	public void Create()
 	{
-		// ...
 		var mesh = new Mesh( Material );
 		BuildMesh( mesh, Size );
 
@@ -32,13 +32,14 @@ public partial class Box : ModelEntity
 
 		Model = model;
 
-		SetupPhysicsFromModel(PhysicsMotionType.Static);
-	}
+		// Das funktioniert nicht:
+		// Log.Info("Size = " + Size);
+		// Size = 64
+		// SetupPhysicsFromAABB(PhysicsMotionType.Static, new Vector3(-0.5f, -0.5f, -0.5f) * Size, new Vector3(0.5f, 0.5f, 0.5f) * Size);
+		// Das schon:
+		SetupPhysicsFromAABB(PhysicsMotionType.Static, new Vector3(-32, -32, -32), new Vector3(32, 32, 32));
 
-	[Event.Tick.Client]
-	public void DebugBoundingBox()
-	{
-		DebugOverlay.Box(this, Color.Red);
+		Tags.Add( "ArenaEntity" );
 	}
 
 	private void BuildMesh( Mesh mesh, float Size )

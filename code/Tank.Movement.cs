@@ -35,6 +35,7 @@ public partial class Tank
 		var moveHelper = new MoveHelper( Position, Velocity );
 		moveHelper.Trace = moveHelper.Trace.Ignore( this )
 			.WithoutTags( "dead" )
+			.WithAnyTags( "ArenaEntity", "solid" )
 			.Size( MoveBounds );
 
 		if ( moveHelper.TryMove( Time.Delta ) > 0 )

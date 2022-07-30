@@ -2,6 +2,7 @@ namespace WiiTanks;
 
 using WiiTanks.Geometry;
 using WiiTanks.Validator;
+using WiiTanks.Entity;
 using System;
 using System.Collections.Generic;
 using Sandbox;
@@ -109,7 +110,7 @@ public class ArenaGrid : Grid
 					box.Material = Material.Load("materials/dev/reflectivity_30.vmat");
 					box.Size = 64;
 					box.Position = origin + new Vector3(w * 64, h * 64, 0);
-//					box.Tags.Add("arena_wall");
+					box.Tags.Add( "ArenaEntity" );
 					Boxes.Add(box);
 				}
 			}

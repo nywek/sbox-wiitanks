@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System.Linq;
+using WiiTanks.Entity;
 
 namespace WiiTanks;
 
@@ -37,7 +38,7 @@ public class Commands
 	[ConCmd.Server("arena")]
 	public static void Arena()
 	{
-		var boxes = Entity.All.OfType<Box>().ToList();
+		var boxes = Sandbox.Entity.All.OfType<Box>().ToList();
 		boxes.ForEach(box => {
 			box.Delete();
 		});

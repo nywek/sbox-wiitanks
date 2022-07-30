@@ -1,5 +1,7 @@
 ﻿using Sandbox;
 
+using WiiTanks.Entity;
+
 namespace WiiTanks;
 
 public partial class Missile : ModelEntity
@@ -44,6 +46,7 @@ public partial class Missile : ModelEntity
 		var tr = Trace.Ray( Position, newPos )
 			.Ignore( Source?.Body )
 			.WithoutTags( "dead" )
+			.WithAnyTags( "ArenaEntity", "solid" )
 			.UseHitboxes( true )
 			.Run();
 
@@ -54,7 +57,7 @@ public partial class Missile : ModelEntity
 		}
 
 		// Check what the missile hit
-		if ( tr.Entity is WorldEntity )
+		if ( tr.Entity is WorldEntity || tr.Entity is Box )
 		{
 			Bounces++;
 
