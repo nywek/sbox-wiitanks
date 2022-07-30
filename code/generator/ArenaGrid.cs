@@ -8,7 +8,7 @@ using Sandbox;
 
 public class ArenaGrid : Grid
 {
-	public ArenaGrid()
+	public ArenaGrid() : base()
 	{
 		GenerateNewArena();
 	}
@@ -27,13 +27,18 @@ public class ArenaGrid : Grid
 
 			double roomTargetArea = Math.Sqrt(Area()) * Random.Shared.NextDouble() - 0.5;
 			int x1 = Rand.Int(1, Width() - 1);
-			int x2 = Rand.Int(x1 + 1, Width() - 1);
+			int x2 = Rand.Int(1, Width() - 1);
 			int y1 = Rand.Int(1, Height() - 1);
-			int y2 = (int)Math.Floor(roomTargetArea / (x2 - x1) + y1);
+			int y2 = Rand.Int(1, Height() - 1);
 
 			var room = new Room(x1, x2, y1, y2);
 
-			if (room.Area() > 3 && room.IsValidOnGrid(this))
+			if (
+				room.Area() > 3
+				&& room.Area() >= roomTargetArea / 2
+				&& room.Area() <= roomTargetArea * 2
+				&& room.IsValidOnGrid(this)
+			)
 			{
 				rooms.Add(room);
 				room.StoreToGrid(this);
@@ -57,19 +62,30 @@ public class ArenaGrid : Grid
 			}
 		});
 
-		for (int i = 0; i < 5; i++)
+		pathways.ForEach(pathway =>
 		{
-			pathways.ForEach(pathway =>
+			pathway.StoreToGrid(this);
+		});
+
+		// Update empty spaces to walls
+		for ( int h = 0; h < Height(); h++ )
+		{
+			for ( int w = 0; w < Width(); w++ )
 			{
-				pathway.StoreToGrid(this);
-			});
-			Smooth();
+				if (TileResolver.IsEmpty(GetTile(w, h)))
+				{
+					new Point(w, h).StoreToGrid(this, TileResolver.DYNAMIC_WALL);
+				}
+			}
 		}
+
+		Smooth();
 
 		// TODO: Remove bad practice, maybe infinite generation of Arena
 		// Still unlikely to generate invalid arenas more than 5 times in a row
 		if (!ArenaValidator.IsValid(this))
 		{
+			Log.Info("Regenerate because an invalid arena was generated...");
 			GenerateNewArena();
 		}
 	}

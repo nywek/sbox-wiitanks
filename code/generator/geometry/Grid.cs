@@ -73,7 +73,13 @@ public class Grid
 		{
 			for (int dy = -deltaSize; dy <= deltaSize; dy++)
 			{
-				if (!(dx == 0 && dy == 0) && TileResolver.IsBlocking(GetTile(x + dx, y + dy)))
+				if (
+					!(dx == 0 && dy == 0)
+					&& (
+						TileResolver.IsEmpty(GetTile(x + dx, y + dy))
+						|| TileResolver.IsBlocking(GetTile(x + dx, y + dy))
+					)
+				)
 				{
 					tiles++;
 				}
@@ -104,14 +110,30 @@ public class Grid
 					int surrounding = GetSurroundingBlockingTiles(x, y);
 					if (surrounding > threshold + roughness)
 					{
-						Data[x, y] = TileResolver.STATIC_WALL;
+						new Point(x, y).StoreToGrid(this, TileResolver.DYNAMIC_WALL);
 					}
 					if (surrounding < threshold - roughness)
 					{
-						Data[x, y] = TileResolver.EMPTY;
+						new Point(x, y).StoreToGrid(this, TileResolver.PATHWAY);
 					}
 				}
 			}
 		}
+	}
+
+	public void Debug()
+	{
+		Log.Info("x/y | 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 ");
+		Log.Info("    + ----------------------------------------------------------------------------- ");
+		for (int h = 0; h < Height(); h++)
+		{
+			var line = "";
+			for (int w = 0; w < Width(); w++)
+			{
+				line += (Data[w, h] < 10 ? "0" : "") + Data[w, h] + " ";
+			}
+			Log.Info((h < 10 ? " 0" : " ") + h + " | " + line);
+		}
+		Log.Info("");
 	}
 }
