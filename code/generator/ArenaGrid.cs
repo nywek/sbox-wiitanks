@@ -2,7 +2,6 @@ namespace WiiTanks;
 
 using WiiTanks.Geometry;
 using WiiTanks.Validator;
-using WiiTanks.Entity;
 using System;
 using System.Collections.Generic;
 using Sandbox;

@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using System.Linq;
-using WiiTanks.Entity;
 
 namespace WiiTanks;
 

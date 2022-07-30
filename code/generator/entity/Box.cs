@@ -1,4 +1,4 @@
-namespace WiiTanks.Entity;
+namespace WiiTanks;
 
 using Sandbox;
 using System.Collections.Generic;

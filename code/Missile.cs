@@ -1,7 +1,5 @@
 ﻿using Sandbox;
 
-using WiiTanks.Entity;
-
 namespace WiiTanks;
 
 public partial class Missile : ModelEntity
