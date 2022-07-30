@@ -108,6 +108,7 @@ public partial class Tank : Entity
 		DebugOverlay.Sphere( Input.Cursor.Origin, 5f, Color.Red, 0f, false );
 
 		var moveHelper = new MoveHelper( Position, Velocity );
+		moveHelper.Trace = moveHelper.Trace.WorldAndEntities();
 		moveHelper.Trace = moveHelper.Trace.Ignore( Body );
 		moveHelper.Trace = moveHelper.Trace.Size( Body.CollisionBounds );
 

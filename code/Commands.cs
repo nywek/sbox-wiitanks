@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Linq;
 
 namespace WiiTanks;
 
@@ -36,9 +37,17 @@ public class Commands
 	[ConCmd.Server("arena")]
 	public static void Arena()
 	{
+		var boxes = Entity.All.OfType<Box>().ToList();
+		boxes.ForEach(box => {
+			box.Delete();
+		});
+
 		Log.Info("Generate Arena");
 
 		var grid = new ArenaGrid();
 		grid.Debug();
+
+		var origin = new Vector3(160, 160, 96);
+		grid.PlaceEntities(origin);
 	}
 }

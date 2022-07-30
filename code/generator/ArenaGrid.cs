@@ -8,14 +8,21 @@ using Sandbox;
 
 public class ArenaGrid : Grid
 {
+	public List<Box> Boxes { get; set; }
 	public ArenaGrid() : base()
 	{
+		Boxes = new();
 		GenerateNewArena();
 	}
 
 	public void GenerateNewArena()
 	{
 		Reset();
+
+		Boxes.ForEach(box => {
+			box.Delete();
+		});
+		Boxes.Clear();
 
 		List<Room> rooms = new();
 		List<Pathway> pathways = new();
@@ -88,5 +95,25 @@ public class ArenaGrid : Grid
 			Log.Info("Regenerate because an invalid arena was generated...");
 			GenerateNewArena();
 		}
+	}
+
+	public void PlaceEntities(Vector3 origin)
+	{
+		for ( int h = 0; h < Height(); h++ )
+		{
+			for ( int w = 0; w < Width(); w++ )
+			{
+				if(TileResolver.IsBlocking(GetTile(w, h))) 
+				{
+					var box = new Box();
+					box.Material = Material.Load("materials/dev/reflectivity_30.vmat");
+					box.Size = 64;
+					box.Position = origin + new Vector3(w * 64, h * 64, 0);
+//					box.Tags.Add("arena_wall");
+					Boxes.Add(box);
+				}
+			}
+		}
+
 	}
 }
