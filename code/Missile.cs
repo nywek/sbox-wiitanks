@@ -4,10 +4,16 @@ namespace WiiTanks;
 
 public partial class Missile : ModelEntity
 {
-	public static float SPEED { get; set; } = 300f;
+	[ConVar.ServerAttribute( "missile_speed", Min = 0 )]
+	public static float Speed { get; set; } = 300f;
 
-	[Net] public Tank Source { get; set; }
+	[ConVar.ServerAttribute( "missile_max_bounces", Min = 0 )]
+	public static int MaxBounces { get; set; } = 1;
+
+	[Net] public Tank? Source { get; set; }
 	[Net] public Vector3 Direction { get; set; }
+
+	private int Bounces;
 
 	public Missile() { Transmit = TransmitType.Always; }
 
@@ -20,26 +26,27 @@ public partial class Missile : ModelEntity
 		Position = Source.Head.GetAttachment( "cannon" )?.Position ?? Source.Position;
 		Rotation = Source.Head.Rotation;
 		Direction = Vector3.Forward * Rotation;
+
+		PlaySpawnSound();
+		
+		Tags.Add( "ArenaEntity" );
 	}
 
 	public override void ClientSpawn()
 	{
-		base.ClientSpawn();
-		//Particles.Create( "particles/missile_trail.vpcf", this, "end" );
 		Particles.Create( "particles/missile_flames.vpcf", this, "end" );
-		//Particles.Create( "particles/shoot_particle.vpcf", this, "end" );
-		//Particles.Create( "particles/tank_shoot.vpcf", this, "end" );
 	}
 
 	[Event.Tick.Server]
 	public void OnServerTick()
 	{
-		var newPos = Position + (Direction * SPEED * Time.Delta);
+		var newPos = Position + (Direction * Speed * Time.Delta);
 		var tr = Trace.Ray( Position, newPos )
-			.Ignore( Source.Body )
+			.Ignore( Source?.Body )
+			.WithoutTags( "dead" )
 			.UseHitboxes( true )
 			.Run();
-		
+
 		if ( !tr.Hit )
 		{
 			Position = newPos;
@@ -49,39 +56,29 @@ public partial class Missile : ModelEntity
 		// Check what the missile hit
 		if ( tr.Entity is WorldEntity )
 		{
-			Explode();
-			
-			// bounce
-			//var newDirection = Vector3.Reflect( Direction, tr.Normal );
-			//Direction = newDirection;
-			//Rotation = Rotation.LookAt( newDirection );
-		}
-		else if ( tr.Entity is ModelEntity )
-		{
-			if ( tr.Entity.Tags.Has( "TankBody" ) )
+			Bounces++;
+
+			if ( Bounces > MaxBounces )
 			{
-				Tank tank = tr.Entity.Parent as Tank;
-				Log.Info( $"Found tank: {tank}" );
-				tank.Explode();
+				DeleteAsync( 0.1f );
 			}
-			// TODO
-			Explode();
+			else
+			{
+				var newDirection = Vector3.Reflect( Direction, tr.Normal );
+				Direction = newDirection;
+				Rotation = Rotation.LookAt( newDirection );
+				PlayBounceEffect();
+			}
 		}
-		else
+		else if ( tr.Entity is Tank t )
 		{
-			Log.Info( $"TR: {tr}" );
+			t.Kill();
+			DeleteAsync( 0.1f );
 		}
 	}
 
-	public void Explode()
+	protected override void OnDestroy()
 	{
-		DeleteAsync( 0.1f );
 		PlayExplodeEffect();
-	}
-
-	[ClientRpc]
-	public void PlayExplodeEffect()
-	{
-		Particles.Create( "particles/missile_explosion/missile_explosion.vpcf", Position );
 	}
 }

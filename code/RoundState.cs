@@ -2,13 +2,13 @@
 
 public enum RoundState
 {
-	INITIALIZING,
+	Initializing,
 	
-	PREPARING,
+	Preparing,
 	
-	ACTIVE,
+	Active,
 	
-	ENDING,
+	Ending,
 	
-	ENDED
+	Ended
 }

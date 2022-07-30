@@ -2,16 +2,29 @@
 
 namespace WiiTanks;
 
-public partial class Tank : Entity
+public partial class Tank : ModelEntity
 {
-	[ConVar.ServerAttribute("tank_speed", Min = 0f)]
+	[ConVar.ServerAttribute( "tank_speed", Min = 0f )]
 	public static float DefaultSpeed { get; set; } = 200f;
-	
+
+	[ConVar.ServerAttribute( "tank_ammo", Min = 0 )]
+	public static int MaxAmmo { get; set; } = 5;
+
+	[ConVar.ServerAttribute( "tank_reload_speed", Min = 0 )]
+	public static float ReloadSpeed = 1f;
+
+	private static Color RespawningColor = new Color( 1f, 1f, 1f, 0.25f );
+	private static Color AliveColor = Color.White;
+	private static BBox HitboxBounds = new BBox( new(-27f, -23f, 0.5136f), new(27f, 23f, 75) );
+	private static BBox MoveBounds = new BBox( new(-16.869f, -16.869f, 0.5136f), new(16.869f, 16.689f, 75) );
+
 	[Net] public Team Team { get; set; }
 	[Net] public ModelEntity Body { get; set; }
 	[Net] public ModelEntity Head { get; set; }
 	[Net, Predicted] public Rotation TargetRotation { get; set; }
-	
+	[Net] public int Ammo { get; set; }
+	private TimeSince TimeSinceLastAmmoReplenish { get; set; }
+
 	public Tank()
 	{
 		Transmit = TransmitType.Always;
@@ -22,28 +35,26 @@ public partial class Tank : Entity
 		Transmit = TransmitType.Always;
 		client.Pawn = this;
 		Team = team;
+		LifeState = LifeState.Respawning;
 	}
 
 	public override void Spawn()
 	{
 		Body = new ModelEntity();
-		Body.SetParent( this ); 
+		Body.SetParent( this );
 		Body.SetModel( "models/tank/tank_body.vmdl" );
 		Body.Owner = this;
-		Body.Tags.Add( "TankBody" );
-
-		var bbox = new BBox(
-			new(-27f, -23f, 0.5136f),
-			new(27f, 23f, 75)
-		);
-		
-		Body.SetupPhysicsFromOBB( PhysicsMotionType.Static, bbox.Mins, bbox.Maxs );
 
 		Head = new ModelEntity();
 		Head.SetParent( this );
 		Head.SetModel( "models/tank/tank_head.vmdl" );
 		Head.Owner = this;
-		Head.Tags.Add( "TankHead" );
+
+		SetupPhysicsFromOBB( PhysicsMotionType.Static, HitboxBounds.Mins, HitboxBounds.Maxs );
+
+		Tags.Add( "ArenaEntity" );
+
+		Ammo = MaxAmmo;
 	}
 
 	public void SpawnAtArena( Arena arena, Vector3 pos )
@@ -53,99 +64,61 @@ public partial class Tank : Entity
 		ResetInterpolation();
 	}
 
-	private Vector3 mousePos;
-	
 	public override void Simulate( Client cl )
 	{
-		base.Simulate( cl );
-
-		//var bbox = new BBox(
-		//	new(-27f, -23f, 20.5136f),
-		//	new(27f, 23f, 75)
-		//);
-		//bbox *= 0.5f;
-		//DebugOverlay.Box( Position, bbox.Mins, bbox.Maxs, Color.Blue );
-		DebugOverlay.Box( Body, Color.Blue );
-		
-		if ( cl.IsBot )
+		if ( Host.IsServer && LifeState == LifeState.Alive && Input.Pressed( InputButton.PrimaryAttack ) && Ammo > 0 )
 		{
-			Position = Position.WithZ( 90 );
-			return;
-		}
+			Ammo--;
+			TimeSinceLastAmmoReplenish = 0;
 
-		if ( Host.IsServer && Input.Pressed( InputButton.PrimaryAttack ) )
-		{
 			var missile = new Missile();
 			missile.Spawn( this );
 
 			PlayShootEffect();
-
-			//var missileCam = new MissileCameraMode();
-			//missileCam.TargetMissile = missile;
-			//Components.RemoveAny<ArenaCameraMode>();
-			//Components.Add( missileCam );
 		}
-		
-		if ( cl.Components.Get<CameraMode>() is not null || Components.Get<ArenaCameraMode>() is null )
+
+		if ( Ammo < MaxAmmo && TimeSinceLastAmmoReplenish > ReloadSpeed )
 		{
-			// Client is using some other camera (dev cam?)
-			return;
+			TimeSinceLastAmmoReplenish = 0;
+			Ammo++;
 		}
 
-		var camRot = Components.Get<ArenaCameraMode>().TargetRot;
-		var movement = (Input.Forward * Vector3.Up * camRot) + (Input.Left * Vector3.Left * camRot);
-
-		if ( !movement.IsNearZeroLength )
+		if ( LifeState == LifeState.Respawning )
 		{
-			TargetRotation = Rotation.LookAt( movement, Vector3.Up );
+			Head.RenderColor = RespawningColor;
+			Body.RenderColor = RespawningColor;
 		}
-		
-		Body.Rotation = Rotation.Lerp( Body.Rotation, TargetRotation, 0.2f );
-		Head.Rotation = Rotation.LookAt( Input.Cursor.Origin.WithZ( 0 ) - Head.Position.WithZ( 0 ) );
-
-		Velocity = movement.Normal * (Input.Down( InputButton.Run ) ? 1000f : DefaultSpeed);
-		
-		DebugOverlay.Sphere( Input.Cursor.Origin, 5f, Color.Red, 0f, false );
-
-		var moveHelper = new MoveHelper( Position, Velocity );
-		moveHelper.Trace = moveHelper.Trace.WorldAndEntities();
-		moveHelper.Trace = moveHelper.Trace.Ignore( Body );
-		moveHelper.Trace = moveHelper.Trace.Size( Body.CollisionBounds );
-
-		if ( moveHelper.TryMove( Time.Delta ) > 0 )
+		else if ( LifeState == LifeState.Alive )
 		{
-			Position = moveHelper.Position;
+			Head.RenderColor = AliveColor;
+			Body.RenderColor = AliveColor;
 		}
+		else if ( LifeState == LifeState.Dead )
+		{
+			Head.RenderColor = Color.Transparent;
+			Body.RenderColor = Color.Transparent;
+		}
+
+		SimulateMovement( cl );
 	}
 
 	public override void BuildInput( InputBuilder inputBuilder )
 	{
 		base.BuildInput( inputBuilder );
 
-		var cannonHeight = Head.GetAttachment( "cannon" )?.Position.z ?? 0f; //103.3159f);
+		var cannonHeight = Head.GetAttachment( "cannon" )?.Position.z ?? 0f; // 103.3159f
 		Vector3 direction = Screen.GetDirection( Mouse.Position );
 		float distance = (cannonHeight - Input.Position.z) / direction.z;
 		var mousePos = Input.Position + (distance * direction);
-		
+
 		inputBuilder.Cursor.Origin = mousePos;
 	}
 
-	[ClientRpc]
-	private void PlayShootEffect()
+	public void Kill()
 	{
-		Particles.Create( "particles/tank_shoot.vpcf", Head, "cannon" );
-		Particles.Create( "particles/shoot_smoke.vpcf", Head, "cannon" );
-	}
-
-	public void Explode()
-	{
+		Host.AssertServer();
 		PlayExplosionEffect();
-		DeleteAsync( 0.1f );
-	}
-
-	[ClientRpc]
-	public void PlayExplosionEffect()
-	{
-		Particles.Create( "particles/tank_explosion/tank_explosion.vpcf", Position );
+		LifeState = LifeState.Dead;
+		Tags.Add( "dead" );
 	}
 }
