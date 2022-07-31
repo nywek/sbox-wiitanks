@@ -37,7 +37,7 @@ public class Commands
 	[ConCmd.Server("arena")]
 	public static void Arena()
 	{
-		var boxes = Sandbox.Entity.All.OfType<Box>().ToList();
+		var boxes = Entity.All.OfType<Box>().ToList();
 		boxes.ForEach(box => {
 			box.Delete();
 		});

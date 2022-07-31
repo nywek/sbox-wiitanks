@@ -75,6 +75,7 @@ public class Grid
 			{
 				if (
 					!(dx == 0 && dy == 0)
+					&& TileResolver.IsValid(GetTile(x + dy, y + dy))
 					&& (
 						TileResolver.IsEmpty(GetTile(x + dx, y + dy))
 						|| TileResolver.IsBlocking(GetTile(x + dx, y + dy))
@@ -88,7 +89,7 @@ public class Grid
 		return tiles;
 	}
 
-	public void Smooth(int iterations = 1, int roughness = 0, int deltaSize = 1)
+	public void Smooth(int iterations = 1, int roughness = 0, int deltaSize = 1, int bias = 0)
 	{
 		for (int iteration = 0; iteration < iterations; iteration++)
 		{
@@ -108,17 +109,29 @@ public class Grid
 					int threshold = ((deltaSize * 2 + 1) * (deltaSize * 2 + 1) - 1) / 2;
 
 					int surrounding = GetSurroundingBlockingTiles(x, y);
-					if (surrounding > threshold + roughness)
+					if (surrounding > threshold + roughness + bias)
 					{
 						new Point(x, y).StoreToGrid(this, TileResolver.DYNAMIC_WALL);
 					}
-					if (surrounding < threshold - roughness)
+					if (surrounding < threshold - roughness + bias)
 					{
 						new Point(x, y).StoreToGrid(this, TileResolver.PATHWAY);
 					}
 				}
 			}
 		}
+	}
+
+	public bool IsOpenSpace(int x, int y)
+	{
+		int tile = GetTile(x, y);
+		if( !TileResolver.IsValid(tile) || TileResolver.IsEmpty(tile) ) {
+			return false;
+		}
+		if ( !TileResolver.IsBlocking(tile) ) {
+			return true;
+		}
+		return false;
 	}
 
 	public void Debug()

@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Linq;
 
 namespace WiiTanks;
 
@@ -66,6 +67,20 @@ public partial class Tank : ModelEntity
 
 	public override void Simulate( Client cl )
 	{
+		if( Host.IsServer && Input.Pressed( InputButton.Flashlight ))
+		{
+			var boxes = All.OfType<Box>().ToList();
+			boxes.ForEach(box => {
+				box.Delete();
+			});
+
+			Log.Info("Generate Arena");
+
+			var origin = new Vector3(160, 160, 96);
+			var grid = new ArenaGrid(origin);
+			grid.PlaceEntities();
+		}
+
 		if ( Host.IsServer && LifeState == LifeState.Alive && Input.Pressed( InputButton.PrimaryAttack ) && Ammo > 0 )
 		{
 			Ammo--;

@@ -133,6 +133,21 @@ public class Room
 				}
 			}
 		}
+
+		for (int x = MinX - 1; x <= MaxX + 1; x++)
+		{
+			if ( grid.IsOpenSpace(x, MinY - 1) || grid.IsOpenSpace(x, MaxY + 1)) {
+				return false;
+			}
+		}
+		
+		for (int y = MinY; y <= MaxY; y++)
+		{
+			if ( grid.IsOpenSpace(MinX - 1, y) || grid.IsOpenSpace(MaxX + 1, y)) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
