@@ -1,0 +1,37 @@
+﻿<link rel="stylesheet" href="LobbyOptionsPanel.scss">
+<link rel="stylesheet" href="../../Styles/base.scss">
+<link rel="stylesheet" href="../../Styles/form.scss">
+
+<div>
+    <SmallBanner>SELECT ARENA</SmallBanner>
+    <ArenaSelectionButton onclick="SelectSomeArena()"></ArenaSelectionButton>
+    <SmallBanner>SETTINGS</SmallBanner>
+    <div class="group horizontal">
+        <text>Enable Mines</text>
+        <ToggleBox @ref="MinesToggle"></ToggleBox>
+    </div>
+    
+    <div class="group vertical">
+        <text>Max Ammo</text>
+        <div>
+            <Slider @ref="MaxAmmoSlider" min="1" max="10" step="1" @value="FloatValue"></Slider>
+            <text @ref="MaxAmmoNumber">25</text>
+        </div>
+    </div>
+    
+    <div class="group vertical">
+        <text>Tank Speed</text>
+        <div>
+            <Slider @ref="TankSpeedSlider" min="0" max="400" @value="FloatValue"></Slider>
+            <text @ref="TankSpeedNumber">25</text>
+        </div>
+    </div>
+    
+    <div class="group vertical">
+        <text>Missile Bounces</text>
+        <div>
+            <Slider @ref="BounceSlider" min="0" max="10" step="1" @value="FloatValue"></Slider>
+            <text @ref="BounceNumber">25</text>
+        </div>
+    </div>
+</div>

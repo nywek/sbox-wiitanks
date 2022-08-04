@@ -1,0 +1,10 @@
+﻿<link rel="stylesheet" href="SlotPanel.scss">
+
+<div>
+    <img @ref="AvatarImage" class="avatar">
+    <text @ref="NameLabel" class="name">Peter</text>
+    <div class="actions">
+        <icon onclick="SwapTeam()" @ref="SwitchTeamButton" class="swap-btn">loop</icon>
+        <icon onclick="LeaveLobby()" @ref="LeaveButton" class="leave-btn">remove_circle</icon>
+    </div>
+</div>

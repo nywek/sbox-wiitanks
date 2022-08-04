@@ -1,0 +1,26 @@
+﻿@import "/UI/style.scss";
+
+BigBanner {
+  background-image: url("/ui/RedBigBanner.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  width: 717px;
+  height: 108px;
+  
+  justify-content: center;
+
+  text {
+    color: white;
+    margin-top: 15px;
+  }
+
+  &.red {
+    background-image: url("/ui/RedBigBanner.png");
+  }
+
+  &.blue {
+    background-image: url("/ui/BlueBigBanner.png");
+  }
+}

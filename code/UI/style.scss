@@ -1,0 +1,130 @@
+﻿$bg-yellow: #E5E3A9;
+$bg-gold: #C4AD4E;
+$banner-red: #B33539;
+$banner-blue: #355FB3;
+$banner-green: #35B35F;
+$banner-yellow: #C4AD4E;
+$banner-gray: #6B6B6B;
+$banner-dark-red: #873A3D;
+$banner-dark-blue: #3A5488;
+$banner-dark-green: #3A8854;
+$banner-dark-yellow: #A3924D;
+$banner-dark-gray: #595959;
+$banner-darkest-red: #562628;
+$banner-darkest-blue: #253555;
+$banner-darkest-green: #255535;
+$banner-darkest-yellow: #726637;
+$banner-darkest-gray: #363636;
+
+$huge-text-size: 64px;
+$big-text-size: 32px;
+$normal-text-size: 24px;
+$smaller-text-size: 16px;
+
+$default-shadow: 8px 8px rgba(0, 0, 0, 0.25);
+
+text {
+  font-family: Poppins;
+  font-weight: bold;
+  color: white;
+}
+
+text.small {
+  font-size: $smaller-text-size;
+}
+
+text.normal {
+  font-size: $normal-text-size;
+}
+
+text.big {
+  font-size: $big-text-size;
+}
+
+text.huge {
+  font-size: $huge-text-size;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+button, .button {
+  background-color: $banner-darkest-gray;
+  height: 80px;
+  border: 8px solid white;
+  border-radius: 90%;
+  font-family: Poppins;
+  font-weight: bold;
+  color: white;
+  font-size: $normal-text-size;
+  align-items: center;
+  padding: 22px 35px 22px 35px;
+  box-shadow: $default-shadow;
+  
+  transition: background-color 0.2s ease;
+  transition: border 0.2s ease;
+  transition: color 0.2s ease;
+  transition: box-shadow 0.1s ease;
+
+  .iconpanel {
+    font-family: MaterialIcons;
+    font-size: $normal-text-size;
+    font-weight: bold;
+  }
+
+  &.has-label > iconpanel
+  {
+    margin-right: 10px;
+  }
+  
+  transition: transform 0.2s ease;
+
+  &:not(.disabled):hover {
+    sound-in: ui.button.over;
+    background-color: $banner-gray;
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+
+  &:not(.disabled):active {
+    sound-in: ui.button.press;
+    background-color: white;
+    color: $banner-darkest-gray;
+    box-shadow: none;
+  }
+}
+
+icon {
+  font-family: MaterialIcons;
+  color: white;
+  font-size: $normal-text-size;
+  cursor: pointer;
+
+  &:not(.disabled):hover {
+    sound-in: ui.button.over;
+  }
+  
+  &:not(.disabled):active {
+    sound-in: ui.button.press;
+  }
+}
+
+.hideable {
+  transition: opacity 0.2s ease;
+  transition: transform 0.2s ease;
+  
+  &.hidden {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+.disabled {
+  backdrop-filter: grayscale(100%);
+}
+
+ChatBox {
+  pointer-events: none;
+}
+

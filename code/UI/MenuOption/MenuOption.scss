@@ -1,0 +1,45 @@
+﻿MenuOption {
+  background-image: url("/ui/SoloMenuOption.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+  width: 379px;
+  height: 382px;
+  min-width: 379px;
+  min-height: 382px;
+  max-width: 379px;
+  max-height: 382px;
+  
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: transform 0.15s ease;
+  
+  &:hover {
+    sound-in: ui.button.over;
+    transform: translateY(-10px);
+  }
+  
+  &:active {
+    sound-in: ui.button.press;
+  }
+  
+  text {
+    text-align: center;
+    align-items: flex-end;
+    margin-bottom: 52px;
+  }
+  
+  &.solo {
+    background-image: url("/ui/SoloMenuOption.png");
+  }
+  
+  &.lobby {
+    background-image: url("/ui/LobbyMenuOption.png");
+  }
+  
+  &.editor {
+    background-image: url("/ui/EditorMenuOption.png");
+  }
+}

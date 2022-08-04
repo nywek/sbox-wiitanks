@@ -1,0 +1,50 @@
+﻿@import "/UI/style.scss";
+
+.countdown {
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  align-items: center;
+  justify-content: center;
+  
+  pointer-events: none;
+
+  .label {
+    font-family: Poppins;
+    font-weight: bolder;
+    font-size: 128px;
+    text-align: center;
+
+    color: #fce59a;
+    text-shadow: 6px 6px #301B06;
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    align-items: center;
+
+    transition: all 0.5s ease;
+    opacity: 0;
+    transform: scale(0.75);
+
+    &.count-in {
+      transition: all 0.5s ease;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    &.count-out {
+      transition: all 0.2s ease;
+      opacity: 0;
+      transform: scale(1.25);
+    }
+  }
+}

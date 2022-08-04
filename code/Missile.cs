@@ -10,6 +10,8 @@ public partial class Missile : ModelEntity
 	[ConVar.ServerAttribute( "missile_max_bounces", Min = 0 )]
 	public static int MaxBounces { get; set; } = 1;
 
+	private static BBox HitboxBounds = new BBox( new(-16, -7f, -7f), new(16f, 7f, 7f) );
+
 	[Net] public Tank? Source { get; set; }
 	[Net] public Vector3 Direction { get; set; }
 
@@ -20,6 +22,8 @@ public partial class Missile : ModelEntity
 	public void Spawn( Tank source )
 	{
 		SetModel( "models/missile/missile.vmdl" );
+		SetupPhysicsFromAABB( PhysicsMotionType.Keyframed, HitboxBounds.Mins, HitboxBounds.Maxs );
+		SetMaterialGroup( source.Body.GetMaterialGroup() );
 
 		Source = source;
 
@@ -28,7 +32,7 @@ public partial class Missile : ModelEntity
 		Direction = Vector3.Forward * Rotation;
 
 		PlaySpawnSound();
-		
+
 		Tags.Add( "ArenaEntity" );
 	}
 
@@ -42,9 +46,9 @@ public partial class Missile : ModelEntity
 	{
 		var newPos = Position + (Direction * Speed * Time.Delta);
 		var tr = Trace.Ray( Position, newPos )
+			.Ignore( this )
 			.Ignore( Source?.Body )
 			.WithoutTags( "dead" )
-			.UseHitboxes( true )
 			.Run();
 
 		if ( !tr.Hit )
@@ -60,7 +64,7 @@ public partial class Missile : ModelEntity
 
 			if ( Bounces > MaxBounces )
 			{
-				DeleteAsync( 0.1f );
+				Delete();
 			}
 			else
 			{
@@ -73,7 +77,12 @@ public partial class Missile : ModelEntity
 		else if ( tr.Entity is Tank t )
 		{
 			t.Kill();
-			DeleteAsync( 0.1f );
+			Delete();
+		}
+		else if ( tr.Entity is Missile m )
+		{
+			m.Delete();
+			Delete();
 		}
 	}
 

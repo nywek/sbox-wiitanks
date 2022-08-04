@@ -1,0 +1,40 @@
+﻿@import "/UI/style.scss";
+
+ArenaOption {
+  width: 272px;
+  height: 172px;
+  background-color: $banner-darkest-gray;
+  box-shadow: $default-shadow;
+  
+  border-radius: 10%;
+
+  margin: 30px 50px;
+  
+  transition: transform 0.2s ease;
+  
+  align-items: center;
+  justify-content: center;
+  
+  &.selected {
+    border: 6px solid white;
+  }
+  
+  &:not(.selected) {
+    .radar {
+      opacity: 0.5;
+    }
+  }
+  
+  &:not(.disabled) {
+    cursor: pointer;
+    
+    &:hover {
+      sound-in: ui.button.over;
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      sound-in: ui.button.press;
+    }
+  }
+}

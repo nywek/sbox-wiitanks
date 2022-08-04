@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using WiiTanks.Extensions;
 
 namespace WiiTanks;
 
@@ -38,28 +39,26 @@ public partial class Tank : ModelEntity
 		LifeState = LifeState.Respawning;
 	}
 
-	public override void Spawn()
+	public void SpawnAtArena( Arena arena, Vector3 pos )
 	{
 		Body = new ModelEntity();
 		Body.SetParent( this );
 		Body.SetModel( "models/tank/tank_body.vmdl" );
+		Body.SetMaterialGroup( Team.GetMaterialGroup() );
 		Body.Owner = this;
 
 		Head = new ModelEntity();
 		Head.SetParent( this );
 		Head.SetModel( "models/tank/tank_head.vmdl" );
+		Head.SetMaterialGroup( Team.GetMaterialGroup() );
 		Head.Owner = this;
 
-		SetupPhysicsFromOBB( PhysicsMotionType.Static, HitboxBounds.Mins, HitboxBounds.Maxs );
+		SetupPhysicsFromOBB( PhysicsMotionType.Keyframed, HitboxBounds.Mins, HitboxBounds.Maxs );
 
 		Tags.Add( "ArenaEntity" );
 
 		Ammo = MaxAmmo;
-	}
-
-	public void SpawnAtArena( Arena arena, Vector3 pos )
-	{
-		Components.GetOrCreate<ArenaCameraMode>().UpdateFrom( arena );
+		
 		Position = pos;
 		ResetInterpolation();
 	}

@@ -24,7 +24,13 @@
 					{
 						_class = "MaterialGroup"
 						name = "Blue"
-						remaps = [  ]
+						remaps = 
+						[
+							{
+								from = "materials/tank/tank_gray.vmat"
+								to = "materials/tank/tank_blue.vmat"
+							},
+						]
 					},
 					{
 						_class = "MaterialGroup"
@@ -32,7 +38,7 @@
 						remaps = 
 						[
 							{
-								from = "materials/tank/tank_blue.vmat"
+								from = "materials/tank/tank_gray.vmat"
 								to = "materials/tank/tank_red.vmat"
 							},
 						]
@@ -43,7 +49,7 @@
 						remaps = 
 						[
 							{
-								from = "materials/tank/tank_blue.vmat"
+								from = "materials/tank/tank_gray.vmat"
 								to = "materials/tank/tank_green.vmat"
 							},
 						]
@@ -54,7 +60,7 @@
 						remaps = 
 						[
 							{
-								from = "materials/tank/tank_blue.vmat"
+								from = "materials/tank/tank_gray.vmat"
 								to = "materials/tank/tank_yellow.vmat"
 							},
 						]
@@ -62,13 +68,7 @@
 					{
 						_class = "MaterialGroup"
 						name = "Gray"
-						remaps = 
-						[
-							{
-								from = "materials/tank/tank_blue.vmat"
-								to = "materials/tank/tank_gray.vmat"
-							},
-						]
+						remaps = [  ]
 					},
 				]
 			},

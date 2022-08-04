@@ -1,0 +1,21 @@
+﻿@import "/UI/style.scss";
+
+.bg {
+  background-color: $bg-yellow;
+  background-image: url("/ui/tank_pattern.png");
+  background-repeat: repeat;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  //transition: transform 0.2s ease;
+  //transition: opacity 0.2s ease;
+//
+  //&.hidden {
+  //  transform: scale(1.25);
+  //}
+}

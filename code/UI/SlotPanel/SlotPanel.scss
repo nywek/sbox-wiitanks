@@ -1,0 +1,114 @@
+﻿@import "/UI/style.scss";
+
+SlotPanel {
+  width: 580px;
+  height: 108px;
+  background-image: url("/ui/RedSlot.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 20px;
+  padding-bottom: 8px;
+  align-items: center;
+  
+  .avatar {
+    width: 87px;
+    height: 87px;
+    
+    margin-left: 5px;
+    
+    background-color: rgba(0, 0, 0, 0.5);
+    
+    border-radius: 100%;
+  }
+  
+  .name {
+    margin-left: 16px;
+    font-size: $normal-text-size;
+  }
+  
+  &:not(.empty) {
+    &.red {
+      background-image: url("/ui/RedSlot.png");
+    }
+
+    &.blue {
+      background-image: url("/ui/BlueSlot.png");
+    }
+
+    &.green {
+      background-image: url("/ui/GreenSlot.png");
+    }
+
+    &.yellow {
+      background-image: url("/ui/YellowSlot.png");
+    }
+
+    .actions {
+      position: absolute;
+      top: 0;
+      right: 50px;
+      height: 100%;
+
+      align-items: center;
+
+      icon {
+        margin-left: 15px;
+        transition: transform 0.2s ease;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+
+  &.empty {
+    background-image: url("/ui/EmptySlot.png");
+    
+    .actions {
+      opacity: 0;
+    }
+
+    .avatar {
+      opacity: 0;
+    }
+
+    .name {
+      opacity: 0;
+    }
+    
+    &.disabled {
+      opacity: 0.5;
+    }
+    
+    &:not(.disabled) {
+      cursor: pointer;
+      
+      &:hover {
+        background-image: url("/ui/EmptyHoveredSlot.png");
+        sound-in: ui.button.over;
+      }
+      
+      &:active {
+        sound-in: ui.button.press;
+      }
+    }
+  }
+  
+  &:not(.can-leave) {
+    .actions {
+      .leave-btn {
+        opacity: 0;
+      }
+    }
+  }
+  
+  &:not(.can-swap) {
+    .actions {
+      .swap-btn {
+        opacity: 0;
+      }
+    }
+  }
+
+}

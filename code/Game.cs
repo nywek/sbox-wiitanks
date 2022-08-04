@@ -1,28 +1,40 @@
-﻿using Sandbox;
-using System.Linq;
+﻿using System.Linq;
+using Sandbox;
 
 namespace WiiTanks;
 
 public partial class TankGame : Sandbox.Game
 {
+	// TODOs
+	// Arenas
+	// Spectator list
+	// AI
+	// Scoreboard
+	// Disable some main menu buttons
+
+	[Net] public Hud Hud { get; set; }
 	[Net] public Lobby Lobby { get; set; }
 	[Net] public Round Round { get; set; }
 
 	public TankGame()
 	{
+		if ( IsServer )
+		{
+			Hud = new Hud();
+
+			Lobby = new Lobby();
+
+			Round = new Round();
+		}
 	}
 
 	public override void PostLevelLoaded()
 	{
-		base.PostLevelLoaded();
-
-		Host.AssertServer();
-
-		Lobby = new Lobby();
+		Lobby.Init();
 	}
 
 	[Event.Tick.Server]
-	public void OnTick()
+	public void OnServerTick()
 	{
 		Round?.Tick();
 	}
@@ -32,10 +44,9 @@ public partial class TankGame : Sandbox.Game
 	{
 		if ( newState == RoundState.Ended )
 		{
-			// Begin a new round
-			var newRound = Lobby.CreateRound();
-			Round = newRound;
-			newRound.Begin();
+			// Go back to lobby
+			Hud.SwitchView( View.Lobby );
+			Round = new Round();
 		}
 	}
 
@@ -43,32 +54,19 @@ public partial class TankGame : Sandbox.Game
 	{
 		base.ClientJoined( client );
 
+		client.Components.Create<ArenaCameraMode>();
+
 		if ( Round is null )
 		{
 			// As long as no round exists, just randomly spawn tanks
 
 			var tank = new Tank( client, Team.BLUE );
-			var randomArena = Entity.All.OfType<Arena>().First();
-			var spawn = randomArena.FindSpawnPoints().First();
+			var arena = Lobby.Options.SelectedArena;
+			var spawn = arena.FindSpawnPoints().First();
 
-			tank.SpawnAtArena( randomArena, spawn.Position );
+			tank.SpawnAtArena( arena, spawn.Position );
 
 			tank.LifeState = LifeState.Alive;
-		}
-
-		Lobby.Join( client );
-
-		if ( Lobby.IsFull )
-		{
-			// Begin round, kill all existing tanks
-			foreach ( var tank in Entity.All.OfType<Tank>().ToList() )
-			{
-				tank.Delete();
-			}
-
-			Round = Lobby.CreateRound();
-
-			Round.Begin();
 		}
 	}
 }

@@ -1,0 +1,40 @@
+﻿@import "/UI/style.scss";
+
+ArenaSelectionButton {
+  justify-content: center;
+  align-items: center;
+  align-self: flex-start;
+  
+  width: 344px;
+  
+  padding: 10px 0 10px 0;
+  
+  RadarImage {
+    //background-image: url("/ui/arena_radar.png");
+    //background-size: cover;
+    //background-repeat: no-repeat;
+    //background-position: center;
+
+    width: 236px;
+    height: 136px;
+    
+    transition: transform 0.2s ease;
+  }
+  
+  &:not(.disabled) {
+    &:hover {
+      //background-color: $banner-gray;
+      cursor: pointer;
+      sound-in: ui.button.over;
+      
+      RadarImage {
+        transform: scale(1.05);
+      }
+    }
+    
+    &:active {
+      sound-in: ui.button.press;
+    }
+  }
+  
+}

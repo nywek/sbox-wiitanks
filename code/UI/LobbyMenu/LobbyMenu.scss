@@ -1,0 +1,42 @@
+﻿@import "/UI/style.scss";
+
+LobbyMenu {
+
+  pointer-events: all;
+  
+  .left {
+    background-image: url("/ui/angled_bg.png");
+    background-size: cover;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: space-between;
+    
+    .slot-container {
+      flex-direction: column;
+    }
+    
+    width: 50%;
+
+    padding: 60px 50px 60px 50px;
+  }
+  
+  .right {
+    width: 50%;
+    
+    flex-direction: column;
+    
+    align-items: flex-end;
+    justify-content: space-between;
+
+    padding: 0px 50px 60px 50px;
+  }
+  
+  //transition: transform 0.2s ease;
+  //transition: opacity 0.2s ease;
+  //
+  //&.hidden {
+  //  transform: scale(1.25);
+  //}
+  
+}

@@ -7,23 +7,31 @@ namespace WiiTanks;
 
 public partial class Lobby : BaseNetworkable
 {
-	public const int MAX_SLOTS = 4;
+	public const int MaxSlots = 4;
 
 	[Net] public IList<Slot> Slots { get; set; }
-
-	public Lobby()
-	{
-		if ( Host.IsServer )
-		{
-			for ( int i = 0; i < MAX_SLOTS; i++ )
-			{
-				var slot = new Slot( i );
-				Slots.Add( slot );
-			}
-		}
-	}
+	[Net] public RoundOptions Options { get; set; }
 
 	public bool IsFull => Slots.Count( s => s.Client is null ) <= 0;
+
+	public void Init()
+	{
+		for ( int i = 0; i < MaxSlots; i++ )
+		{
+			Slots.Add( new Slot( i ) );
+		}
+		
+		var randomArena = Entity.All.OfType<Arena>().First();
+		
+		Options = new RoundOptions
+		{
+			SelectedArenaId = randomArena.NetworkIdent,
+			MinesEnabled = false,
+			MaxAmmo = Tank.MaxAmmo,
+			TankSpeed = Tank.DefaultSpeed,
+			MissileBounces = Missile.MaxBounces
+		};
+	}
 
 	public void Join( Client client )
 	{
@@ -47,22 +55,5 @@ public partial class Lobby : BaseNetworkable
 		}
 	}
 
-	public Round CreateRound()
-	{
-		Host.AssertServer();
-		var randomArena = Entity.All.OfType<Arena>().First();
-		var round = new Round( randomArena );
-		
-		foreach (var slot in Slots.Where( s => s.IsOccupied ))
-		{
-			round.Join( slot.Client, slot.Team );
-		}
-
-		return round;
-	}
-
-	public override string ToString()
-	{
-		return $"Lobby({Slots})";
-	}
+	public override string ToString() => $"Lobby({Slots})";
 }

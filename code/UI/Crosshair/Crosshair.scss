@@ -1,0 +1,34 @@
+﻿@import "/UI/style.scss";
+
+.crosshair {
+  position: absolute;
+  width: 43px;
+  height: 43px;
+  background-image: url("/ui/crosshair_5.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &.ammo-0 {
+    background-image: url("/ui/crosshair_0.png");
+  }
+
+  &.ammo-1 {
+    background-image: url("/ui/crosshair_1.png");
+  }
+
+  &.ammo-2 {
+    background-image: url("/ui/crosshair_2.png");
+  }
+
+  &.ammo-3 {
+    background-image: url("/ui/crosshair_3.png");
+  }
+
+  &.ammo-4 {
+    background-image: url("/ui/crosshair_4.png");
+  }
+
+  &.ammo-5 {
+    background-image: url("/ui/crosshair_5.png");
+  }
+}

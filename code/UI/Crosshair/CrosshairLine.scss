@@ -1,0 +1,14 @@
+﻿CrosshairLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  .crosshair-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0.3;
+  }
+}

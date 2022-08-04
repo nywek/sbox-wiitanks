@@ -1,0 +1,20 @@
+﻿@import "/UI/style.scss";
+
+SmallBanner {
+  background-image: url("/ui/SmallGrayBanner.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  width: 452px;
+  height: 72px;
+  
+  justify-content: center;
+  align-items: center;
+  
+  text {
+    color: white;
+    padding-bottom: 22px;
+  }
+
+}

@@ -1,0 +1,42 @@
+﻿@import "/UI/style.scss";
+
+ToggleBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: $banner-dark-gray;
+  
+  justify-content: center;
+  align-items: center;
+  
+  .inner {
+    transition: width 0.2s ease;
+    transition: height 0.2s ease;
+    border-radius: 100%;
+    background-color: white;
+  }
+  
+  &.checked {
+    .inner {
+      width: 80%;
+      height: 80%;
+    }
+  }
+  
+  &:not(.checked) {
+    .inner {
+      width: 0px;
+      height: 0px;
+    }
+  }
+  
+  &:not(.disabled):hover {
+    cursor: pointer;
+    sound-in: ui.button.over;
+  }
+  
+  &:not(.disabled):active {
+    sound-in: ui.button.press;
+  }
+  
+}
