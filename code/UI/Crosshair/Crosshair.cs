@@ -13,7 +13,7 @@ public partial class Crosshair : Panel
 
 	public override void Tick()
 	{
-		if ( Local.Pawn is not Tank tank || CurrentRound is null )
+		if ( Local.Pawn is not Tank tank )
 		{
 			Style.Opacity = 0;
 			return;

@@ -43,7 +43,8 @@ public partial class Hud : HudEntity<RootPanel>
 				LobbyMenu.Hide();
 			}
 		}
-		
+
+		RootPanel.Style.Opacity = Local.Client.IsInDevCam() ? 0 : 1;
 	}
 
 	private void Init()

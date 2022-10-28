@@ -72,6 +72,11 @@ public static class Extensions
 			.ToList();
 	}
 
+	public static bool IsInDevCam( this Client client )
+	{
+		return client.Components.Get<DevCamera>() != null;
+	}
+	
 }
 
 public class NamespaceExtensions
