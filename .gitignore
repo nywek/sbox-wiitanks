@@ -8,6 +8,7 @@ code/Properties
 *.vpcf_c
 *.sound_c
 *.vanmgrph_c
+*.decal_c
 *.vpk
 *.exr
 maps/_bakeresourcecache
