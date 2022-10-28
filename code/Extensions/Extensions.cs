@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
 using Sandbox.UI;
@@ -28,7 +29,8 @@ public static class Extensions
 		Team.RED => "Red",
 		Team.GREEN => "Green",
 		Team.YELLOW => "Yellow",
-		Team.GRAY => "Gray"
+		Team.GRAY => "Gray",
+		_ => throw new ArgumentOutOfRangeException( nameof(team), team, null )
 	};
 
 	public static string GetFriendlyName( this Team team ) => team switch
@@ -37,7 +39,8 @@ public static class Extensions
 		Team.RED => "Red",
 		Team.GREEN => "Green",
 		Team.YELLOW => "Yellow",
-		Team.GRAY => "Gray"
+		Team.GRAY => "Gray",
+		_ => throw new ArgumentOutOfRangeException( nameof(team), team, null )
 	};
 
 	public static void SetAvatar( this Image image, long steamId )

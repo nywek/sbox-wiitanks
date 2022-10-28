@@ -6,7 +6,7 @@ public partial class Slot : BaseNetworkable
 {
 	[Net] public int Index { get; set; }
 
-	[Net, Change( nameof(OnSlotChanged) )] public Client Client { get; set; }
+	[Net, Change( nameof(OnSlotChanged) )] public Client? Client { get; set; }
 
 	[Net, Change( nameof(OnSlotChanged) )] public Team Team { get; set; }
 

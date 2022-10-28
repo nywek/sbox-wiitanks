@@ -14,7 +14,7 @@ public partial class Arena : BrushEntity
 	public override void Spawn()
 	{
 		base.Spawn();
-		Solid = false;
+		Collisions = false;
 	}
 
 	[Event.Tick]

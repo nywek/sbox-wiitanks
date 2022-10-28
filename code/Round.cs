@@ -113,8 +113,6 @@ public partial class Round : BaseNetworkable
 
 	public void Tick()
 	{
-		Log.Debug($"{this} has {Participants.Count} participants");
-		
 		if ( State == RoundState.Preparing && TimeSinceStateChanged > PREPARING_DURATION )
 		{
 			SwitchState( RoundState.Active );

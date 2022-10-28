@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.Json;
 using Sandbox;
 using WiiTanks.Extensions;
@@ -7,7 +8,7 @@ namespace WiiTanks;
 
 public class Commands
 {
-	public static TankGame Game => Sandbox.Game.Current as TankGame;
+	public static TankGame Game => Sandbox.Game.Current as TankGame ?? throw new InvalidOperationException();
 
 	[ConCmd.Server( "lobby_join" )]
 	public static void LobbyJoin( int slotIndex )
