@@ -1,0 +1,8 @@
+{
+  "cloud_packages": [
+    "baik.hexagon_tiles#8839"
+  ],
+  "game_packages": [
+    "kvn.wiitanks"
+  ]
+}
