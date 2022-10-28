@@ -20,6 +20,13 @@
     ],
     "RankType": "None",
     "PerMapRanking": false,
-    "LeaderboardType": "None"
+    "LeaderboardType": "None",
+    "GameCategory": "None",
+    "Compiler": {
+      "RootNamespace": "Sandbox",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "Nullables": true
+    }
   }
 }
