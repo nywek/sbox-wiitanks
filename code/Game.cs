@@ -37,6 +37,14 @@ public partial class TankGame : Sandbox.Game
 	public void OnServerTick()
 	{
 		Round?.Tick();
+
+		foreach (var client in Client.All)
+		{
+			if ( client.Components.Get<CameraMode>() is null)
+			{
+				client.Components.Create<ArenaCameraMode>();
+			}
+		}
 	}
 
 	[Event( "round.statechange" )]

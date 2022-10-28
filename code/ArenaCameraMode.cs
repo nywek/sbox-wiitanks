@@ -9,6 +9,11 @@ public partial class ArenaCameraMode : CameraMode
 
 	private int _currentArenaIdent = -1;
 
+	public ArenaCameraMode()
+	{
+		WatchCurrentLobbyArena();
+	}
+
 	public override void Update()
 	{
 		Position = Position.LerpTo(TargetPos, 0.05f);
@@ -17,6 +22,11 @@ public partial class ArenaCameraMode : CameraMode
 
 	[Event( "lobby.options.updated" )]
 	public void OnOptionsUpdated()
+	{
+		WatchCurrentLobbyArena();
+	}
+
+	private void WatchCurrentLobbyArena()
 	{
 		if ( Host.IsClient )
 			return;
